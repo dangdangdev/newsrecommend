@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<script src="https://how2j.cn/study/js/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.cookie.js"></script>
+<link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+<script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+<script src="http://how2j.cn/study/vue.min.js"></script>
+<link rel="stylesheet" href="/css/style1.css">
+<script>
+    var user;
+    var page = 0;
+    var pagesize = 8;
+    var vueList ;
+    var moduleOld = '推荐'
+    $(document).ready(function () {
+        if ($.cookie("user") == null) {
+            location.href = "/newsrecommend/login"
+        } else {
+            user = JSON.parse($.cookie("user"))
+            vueList = new Vue({
+                el: '#list',
+                data: {
+                    newslist: "",
+                    load: true
+                },
+                methods: {
+                    enterNewsPage: function (newsid) {
+                        location.href = "/newsrecommend/news?id=" + newsid + "&name=" + user.name
+                    }, changeNewsList: function (newsListNew) {
+                        this.newslist = newsListNew
+                    }, setLoad: function (load) {
+                        this.load = load
+                    }
+                }
+            })
+            new Vue({
+                el: "#top",
+                data: {
+                    user: user
+                },
+                methods: {
+                    flush: function () {
+                        if (moduleOld == '推荐') {
+                            recNews()
+                        } else {
+                            page = page + 1
+                            nextPage()
+                        }
+                    }
+                }
+            })
+            $.ajax({
+                /*url:'/newsrecommend/recommendation',*/
+                url: '/newsrecommend/recnews',
+                type: 'GET',
+                data: {
+                    /*name:user.name*/
+                    name: user.name
+                },
+                error: errorFunction,
+                success: function (result) {
+                    vueList.changeNewsList(result)
+                    vueList.setLoad(false)
+                }
+            })
+
+        }
+    })
+
+    function errorFunction() {
+        alert("error");
+    }
+
+    function successFunction() {
+        alert("success");
+    }
+
+    function recNews() {
+        vueList.setLoad(true)
+        $.ajax({
+            /*url:'/newsrecommend/recommendation',*/
+            url: '/newsrecommend/recnews',
+            type: 'GET',
+            data: {
+                /*name:user.name*/
+                name: user.name
+            },
+            error: errorFunction,
+            success: function (result) {
+                vueList.setLoad(false)
+                vueList.changeNewsList(result)
+            }
+        })
+    }
+
+    function nextPage() {
+        vueList.setLoad(true)
+        $.ajax({
+            /*url:'/newsrecommend/recommendation',*/
+            url: '/newsrecommend/modulenews',
+            type: 'GET',
+            data: {
+                /*name:user.name*/
+                module: moduleOld,
+                page: page,
+                pagesize: pagesize
+            },
+            error: errorFunction,
+            success: function (result) {
+                vueList.setLoad(false)
+                vueList.changeNewsList(result)
+            }
+        })
+    }
+
+    function select(module) {
+        switch (moduleOld) {
+            case "推荐":
+                $("#1").removeClass("active");
+                break;
+            case "体育":
+                $("#2").removeClass("active");
+                break;
+            case "军事":
+                $("#3").removeClass("active");
+                break;
+            case "国际":
+                $("#4").removeClass("active");
+                break;
+            case "娱乐":
+                $("#5").removeClass("active");
+                break;
+            case "社会":
+                $("#6").removeClass("active");
+                break;
+            case "科技":
+                $("#7").removeClass("active");
+                break;
+            case "财经":
+                $("#8").removeClass("active");
+                break;
+        }
+        switch (module) {
+            case "推荐":
+                $("#1").addClass("active");
+                break;
+            case "体育":
+                $("#2").addClass("active");
+                break;
+            case "军事":
+                $("#3").addClass("active");
+                break;
+            case "国际":
+                $("#4").addClass("active");
+                break;
+            case "娱乐":
+                $("#5").addClass("active");
+                break;
+            case "社会":
+                $("#6").addClass("active");
+                break;
+            case "科技":
+                $("#7").addClass("active");
+                break;
+            case "财经":
+                $("#8").addClass("active");
+                break;
+        }
+        moduleOld = module
+        if (module == "推荐") {
+            recNews()
+        } else {
+            page = 0
+            nextPage()
+        }
+    }
+</script>
+<style>
+    body {
+        padding-top: 50px;
+    }
+</style>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="d-flex" style="padding-top: 8px">
+        <div class="text-primary pull-left" style="padding-top: 8px;padding-left: 30px;font-size: 15px">基于内容的新闻推荐</div>
+        <div id="top" class="pull-right" style="padding-right: 30px;padding-bottom: 8px">
+            <button class="btn btn-success" @click="flush()">刷新
+            </button>{{user.name}}
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-2" style="padding-top: 70px">
+            <ul id="module" class="nav nav-pills nav-stacked" style="width:80px">
+                <li id="1" role="presentation" class="active" onclick="select('推荐')"><a href="#">推荐</a></li>
+                <li id="2" role="presentation" class="" onclick="select('体育')"><a href="#">体育</a></li>
+                <li id="3" role="presentation" class="" onclick="select('军事')"><a href="#">军事</a></li>
+                <li id="4" role="presentation" class="" onclick="select('国际')"><a href="#">国际</a></li>
+                <li id="5" role="presentation" class="" onclick="select('娱乐')"><a href="#">娱乐</a></li>
+                <li id="6" role="presentation" class="" onclick="select('社会')"><a href="#">社会</a></li>
+                <li id="7" role="presentation" class="" onclick="select('科技')"><a href="#">科技</a></li>
+                <li id="8" role="presentation" class="" onclick="select('财经')"><a href="#">财经</a></li>
+            </ul>
+        </div>
+        <div id="list">
+            <div v-if="load" style="text-align: center;padding-top: 20%">
+                加载中
+            </div>
+            <div v-else class="col-xs-10" style="padding-top: 40px;">
+                <div v-for="news in newslist">
+                    <div id="news1" style="height: 40px;" @click="enterNewsPage(news.id)">
+                        <p>{{news.title}}</p>
+                        <p>{{news.from}} {{news.timeString}}</p>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

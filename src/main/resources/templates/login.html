@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<title>新闻推荐</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.cookie.js"></script>
+<script>
+    $(function () {
+        $("#login").click(function () {
+            var username = $("#userNameLogin").val();
+            var password = $("#passwordLogin").val();
+            if(username=="" || password==""){
+                alert("用户名或者密码不能为空");
+            }else{
+                $.get(
+                    "/newsrecommend/user",
+                    {
+                        "name":username,
+                        "password":password
+                    },
+                    function (result) {
+                        if(result!=null && result!=""){
+                            $.cookie("user",JSON.stringify(result),{
+                                expires:2
+                            })
+                            location.href="/newsrecommend"
+                        }else{
+                            alert("用户名或密码有误")
+                        }
+                    }
+                )
+            }
+        });
+        $("#register").click(function () {
+            var username = $("#userNameRegister").val();
+            var password = $("#passwordRegister").val();
+            if(username=="" || password==""){
+                alert("用户名或者密码不能为空");
+            }else{
+                $.post(
+                    "/newsrecommend/user",
+                    {
+                        "name":username,
+                        "password":password
+                    },
+                    function (result) {
+                        if(result!=null && result!=""){
+                            $.cookie("user",JSON.stringify(result),{
+                                expires:2
+                            })
+                            location.href="/newsrecommend"
+                        }else{
+                            alert("该用户已存在")
+                        }
+                    }
+                )
+            }
+        });
+    })
+</script>
+<body>
+    <div class="content">
+        <div class="form sign-in">
+            <h2>欢迎</h2>
+            <label>
+                <span>用户名</span>
+                <input id="userNameLogin" type="email" />
+            </label>
+            <label>
+                <span>密码</span>
+                <input id="passwordLogin" type="password" />
+            </label>
+            <button id="login" type="button" class="submit" >登 录</button>
+        </div>
+        <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+                    <h2>还未注册？</h2>
+                    <p>立即注册，发现大量机会！</p>
+                </div>
+                <div class="img__text m--in">
+                    <h2>已有帐号？</h2>
+                    <p>有帐号就登录吧，好久不见了！</p>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">注 册</span>
+                    <span class="m--in">登 录</span>
+                </div>
+            </div>
+            <div class="form sign-up">
+                <h2>立即注册</h2>
+                <label>
+                    <span>用户名</span>
+                    <input id="userNameRegister" type="text" />
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input id="passwordRegister" type="password" />
+                </label>
+                <button id="register" type="button" class="submit">注 册</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+	
+	<div style="text-align:center;">
+</div>
+</body>
+
+</html>
