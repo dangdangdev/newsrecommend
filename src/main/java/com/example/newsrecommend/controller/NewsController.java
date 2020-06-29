@@ -34,6 +34,7 @@ public class NewsController {
         News news = newsService.getNewsById(id);
         this.getNewsTrans(user, news);
         m.addAttribute(news);
+        m.addAttribute("uname",name);
         return "news";
     }
 

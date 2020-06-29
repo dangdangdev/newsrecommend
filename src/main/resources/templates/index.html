@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>新闻推荐</title>
 </head>
 
 <script src="https://how2j.cn/study/js/jquery/2.0.0/jquery.min.js"></script>
@@ -14,8 +14,8 @@
 <script>
     var user;
     var page = 0;
-    var pagesize = 8;
-    var vueList ;
+    var pagesize = 20;
+    var vueList;
     var moduleOld = '推荐'
     $(document).ready(function () {
         if ($.cookie("user") == null) {
@@ -184,21 +184,48 @@
     body {
         padding-top: 50px;
     }
+
+    main_left {
+        position: fixed;
+        width: 80px
+    }
 </style>
 <body>
+
+
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="d-flex" style="padding-top: 8px">
-        <div class="text-primary pull-left" style="padding-top: 8px;padding-left: 30px;font-size: 15px">基于内容的新闻推荐</div>
-        <div id="top" class="pull-right" style="padding-right: 30px;padding-bottom: 8px">
-            <button class="btn btn-success" @click="flush()">刷新
-            </button>{{user.name}}
-        </div>
-    </div>
+    <table style="width: 100%">
+        <tbody>
+        <tr height="50px" >
+            <td width="270px" style="padding-left:40px">
+                <div class="text-primary">基于内容的新闻推荐系统</div>
+            <td align="center">
+                <div class="input-group" style="width:250px">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">搜索</button>
+                    </span>
+                </div>
+            </td>
+            <td  align="right" style="padding-right: 40px;">
+                <div id="top">
+                    <button class="btn btn-success" @click="flush()" >刷新
+                    </button>
+                    <span style="padding-left: 15px;padding-right: 15px">{{user.name}}</span>
+                    <a href="">
+                        <img src="../../images/favorite.png" alt="收藏夹" width="30" height="30">
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
 </nav>
 <div class="container">
     <div class="row">
-        <div class="col-xs-2" style="padding-top: 70px">
-            <ul id="module" class="nav nav-pills nav-stacked" style="width:80px">
+        <div class="col-xs-2 main_left" style="padding-top: 70px">
+            <ul id="module" class="nav nav-pills nav-stacked" style="">
                 <li id="1" role="presentation" class="active" onclick="select('推荐')"><a href="#">推荐</a></li>
                 <li id="2" role="presentation" class="" onclick="select('体育')"><a href="#">体育</a></li>
                 <li id="3" role="presentation" class="" onclick="select('军事')"><a href="#">军事</a></li>

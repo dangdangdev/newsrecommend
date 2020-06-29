@@ -9,19 +9,51 @@
 <link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
 <script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
 <script src="http://how2j.cn/study/vue.min.js"></script>
+<script>
+    function errorFunction() {
+        alert("error");
+    }
+    function addCollection() {
+        console.log("11")
+        var newsId = [[${news.id}]]
+        var uname = [[${uname}]]
+
+        $.ajax({
+            /*url:'/newsrecommend/recommendation',*/
+            url: '/newsrecommend/collection',
+            type: 'POST',
+            data: {
+                /*name:user.name*/
+                uname: uname,
+                nid: newsId
+            },
+            error: errorFunction,
+            success: function (result) {
+                if(result == "existed")
+                    alert("收藏夹中已存在")
+                if(result == "success")
+                    alert("添加到收藏夹中")
+            }
+        })
+    }
+</script>
 <link rel="stylesheet" href="/css/style1.css">
 <style>
     body {
         padding-top: 50px;
     }
 </style>
+
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="d-flex" style="padding-top: 15px">
         <div class="text-primary pull-left" style="padding-left: 30px">新闻推荐系统</div>
-        <div class="text-muted pull-right" style="padding-right: 30px">dangdang</div>
+        <div class="text-muted pull-right" style="padding-right: 30px">
+            dangdang<button class="btn btn-success" onclick="addCollection()">收藏</button>
+        </div>
     </div>
 </nav>
+
 <div style="padding-top:10px">
     <div style="padding-left: 15%;padding-right: 15%;">
         <p style="font-size: 25px;font-weight: bold" th:text="${news.title}"></p>
