@@ -212,7 +212,7 @@
                     <button class="btn btn-success" @click="flush()" >刷新
                     </button>
                     <span style="padding-left: 15px;padding-right: 15px">{{user.name}}</span>
-                    <a href="">
+                    <a :href="'/newsrecommend/collection?uname='+user.name">
                         <img src="../../images/favorite.png" alt="收藏夹" width="30" height="30">
                     </a>
                 </div>

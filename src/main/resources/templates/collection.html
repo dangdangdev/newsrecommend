@@ -25,12 +25,12 @@
     </div>
 </nav>
 <div id="list">
-    <div class="col-xs-10" style="padding-top: 40px;">
-        <div th:each="news: ${collectionNews}">
+    <div class="col-xs-10" style="padding-top: 40px;padding-left:400px" >
+        <div th:each="news: ${newsList}">
             <div id="news1" style="height: 40px;">
-                <a href="/newsrecommend/news?id=" + ${news.id} + "&name=" + ${uname}>
+                <a th:href="|/newsrecommend/news?id=${news.id}&name=${uname}|">
                     <p th:text="${news.title}"> </p>
-                    <p th:text="${news.from} ${news.timeString}"></p>
+                    <p th:text="${news.from}"></p>
                 </a>
             </div>
             <hr>
